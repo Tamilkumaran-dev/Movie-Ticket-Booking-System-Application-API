@@ -67,7 +67,7 @@ public class AuthController {
                 .secure(false)            // required for HTTPS
                 .path("/")               // root path
                 .maxAge(60*2)    // 12 hours
-                .sameSite("None")        // allow cross-origin
+                .sameSite("Lax")        // allow cross-origin
                 .build();
 
         // Add cookie to response
@@ -121,7 +121,7 @@ public class AuthController {
                 .secure(false)            // required for HTTPS
                 .path("/")               // root path
                 .maxAge(60*2)    // 12 hours
-                .sameSite("None")        // allow cross-origin
+                .sameSite("Lax")        // allow cross-origin
                 .build();
 
         // Add cookie to response

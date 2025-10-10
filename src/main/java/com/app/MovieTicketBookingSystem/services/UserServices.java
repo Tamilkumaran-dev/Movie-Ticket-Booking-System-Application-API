@@ -38,7 +38,7 @@ public class UserServices {
         }
 
         usersRepo.save(user);
-        return new ResponseDto("Registered","Registered");
+        return new ResponseDto("Registered successfully","Registered");
     }
 
     public ResponseDto login(LoginDto login){

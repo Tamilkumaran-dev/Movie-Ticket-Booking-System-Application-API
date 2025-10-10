@@ -20,10 +20,10 @@ public class GlobalExceptionHandler {
         ExceptionDto exception = new ExceptionDto();
         exception.setMessage(thrownException.getMessage());
         exception.setTiming(LocalDateTime.now());
-        exception.setStatus(HttpStatus.IM_USED.value());
+        exception.setStatus(HttpStatus.BAD_REQUEST.value());
         exception.setPath(webRequest.getDescription(false));
 
-        return new ResponseEntity<>(exception,HttpStatus.IM_USED);
+        return new ResponseEntity<>(exception,HttpStatus.BAD_REQUEST);
     }
 
 

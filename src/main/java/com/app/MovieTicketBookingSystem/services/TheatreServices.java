@@ -34,10 +34,10 @@ public class TheatreServices {
         Optional<Theatre> isExist = theatreRepo.findByEmail(theatre.getEmail());
 
         if(isExist.isPresent()){
-            throw new DataAlreadyExistException("The emailId exception");
+            throw new DataAlreadyExistException("The emailId is already used");
         }
 
-        if(theatre.getTheatreName().isEmpty() || theatre.getAddress().isEmpty() || theatre.getEmail().isEmpty() || theatre.getPassword().isEmpty()){
+        else if(theatre.getTheatreName().isEmpty() || theatre.getAddress().isEmpty() || theatre.getEmail().isEmpty() || theatre.getPassword().isEmpty()){
             throw new InputFieldIsEmpty("Some of the field are empty");
         }
 
@@ -46,7 +46,7 @@ public class TheatreServices {
 
         theatreRepo.save(theatre);
 
-        return new ResponseDto("Registered","Registered");
+        return new ResponseDto("Register successfully","Registered");
     }
 
     public ResponseDto Login(LoginDto loginDto){
