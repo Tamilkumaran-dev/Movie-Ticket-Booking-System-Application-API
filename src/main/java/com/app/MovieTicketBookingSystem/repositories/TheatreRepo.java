@@ -16,10 +16,6 @@ public interface TheatreRepo extends JpaRepository<Theatre,Long> {
     public Optional<Theatre> findByEmail(String email);
 
 
-
-
-
-
     @Query("""
            SELECT t FROM Theatre t 
            WHERE LOWER(t.theatreName) LIKE LOWER(CONCAT('%', :keyword, '%')) 
