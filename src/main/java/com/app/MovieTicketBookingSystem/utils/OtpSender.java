@@ -28,12 +28,22 @@ public class OtpSender {
     }
 
     @Async
-    public void ticketConformationMethod(String email, String theatre, String address, LocalDateTime time, String seats){
+    public void ticketConformationMethod(String email, String theatre, String address,String showName, LocalDateTime time, String seats){
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Ticket Conformed!");
-        message.setText("Ticket conformed " +"\nTheatre : " + theatre + "\nAddress : " + address + "\nTiming : " + time + "SeatNo : " + seats);
+        message.setText("Ticket conformed " +"\nTheatre : " + theatre + "\nAddress : " + address + "\nMovie : " + showName + "\nTiming : " + time + "SeatNo : " + seats);
+        mailSender.send(message);
+    }
+
+    @Async
+    public void cancelTicketMethod(String email,String showName, LocalDateTime time, String seats){
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Ticket Cancel!");
+        message.setText("Ticket Cancel " +"\nMovie : "  + showName  + "\nTiming : " + time + "SeatNo : " + seats);
         mailSender.send(message);
     }
 

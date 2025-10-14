@@ -2,12 +2,14 @@ package com.app.MovieTicketBookingSystem.services;
 
 import com.app.MovieTicketBookingSystem.dto.LoginDto;
 import com.app.MovieTicketBookingSystem.dto.ResponseDto;
+import com.app.MovieTicketBookingSystem.entities.BookedSeats;
 import com.app.MovieTicketBookingSystem.entities.Shows;
 import com.app.MovieTicketBookingSystem.entities.Theatre;
 import com.app.MovieTicketBookingSystem.entities.Users;
 import com.app.MovieTicketBookingSystem.exception.exceptions.DataAlreadyExistException;
 import com.app.MovieTicketBookingSystem.exception.exceptions.InputFieldIsEmpty;
 import com.app.MovieTicketBookingSystem.exception.exceptions.NotFound;
+import com.app.MovieTicketBookingSystem.repositories.ShowsRepo;
 import com.app.MovieTicketBookingSystem.repositories.TheatreRepo;
 import com.app.MovieTicketBookingSystem.utils.JwtUtil;
 import com.app.MovieTicketBookingSystem.utils.OtpSender;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +30,7 @@ public class TheatreServices {
     private TheatreRepo theatreRepo;
     private OtpSender otpSender;
     private PasswordEncoder passwordEncoder;
+    private ShowsRepo showsRepo;
     private JwtUtil jwtUtil;
 
     public ResponseDto addNewTheatre(Theatre theatre){
@@ -52,8 +56,6 @@ public class TheatreServices {
     public ResponseDto Login(LoginDto loginDto){
 
         Optional<Theatre> theatre = theatreRepo.findByEmail(loginDto.getEmail());
-        System.out.println(theatre.get().getEmail());
-        System.out.println(loginDto.getEmail());
 
         if(theatre.isEmpty()){
             throw  new NotFound("Email id is not exist");
@@ -126,6 +128,10 @@ public class TheatreServices {
 
         Optional<Theatre> theatre = theatreRepo.findByEmail(email);
 
+        theatre.get().getShows()
+                .sort((s1, s2) -> s1.getTiming().compareTo(s2.getTiming()));
+
+
         return new ResponseDto("Theatre profile","Profile",theatre);
     }
 
@@ -166,7 +172,29 @@ public class TheatreServices {
 
     }
 
+    public ResponseDto updateProfile(Theatre theatre){
+        Optional<Theatre> fetchTheatre = theatreRepo.findByEmail(theatre.getEmail());
 
+        fetchTheatre.get().setTheatreName(theatre.getTheatreName());
+        fetchTheatre.get().setAddress(theatre.getAddress());
+
+        theatreRepo.save(fetchTheatre.get());
+        return new ResponseDto("successfully updated", "Updated");
+    }
+
+    public ResponseDto editShow(Shows shows){
+
+        Optional<Theatre> fetchTheatre = theatreRepo.findById(shows.getTheatreId());
+
+        List<Shows> listOfShows = fetchTheatre.get().getShows();
+        List<Shows> updatedShows = listOfShows.stream().filter((s)-> !s.getId().equals(shows.getId())).toList();
+        updatedShows.add(shows);
+        fetchTheatre.get().setShows(updatedShows);
+        theatreRepo.save(fetchTheatre.get());
+
+        return new ResponseDto("show updated successfully","Updated");
+
+    }
 
 
 

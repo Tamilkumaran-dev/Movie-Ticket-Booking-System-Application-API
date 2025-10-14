@@ -14,18 +14,17 @@ import com.app.MovieTicketBookingSystem.utils.JwtUtil;
 import com.app.MovieTicketBookingSystem.utils.OtpSender;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class SeatService {
 
     private TheatreRepo theatreRepo;
@@ -65,8 +64,12 @@ public class SeatService {
 
         BookedSeats bookedSeats = new BookedSeats();
         bookedSeats.setShowId(ShowId);
+        bookedSeats.setShowName(show.get().getShowName());
         bookedSeats.setTheatreId(TheatreId);
+        bookedSeats.setTheatreName(theatre.get().getTheatreName());
+        bookedSeats.setTheatreAddress(theatre.get().getAddress());
         bookedSeats.setUserId(user.get().getId());
+        bookedSeats.setUserName(user.get().getName());
         bookedSeats.setShowData(show.get());
         bookedSeats.setUserData(user.get());
         bookedSeats.setSeats(listOfSeats);
@@ -77,6 +80,7 @@ public class SeatService {
         emailSender.ticketConformationMethod(user.get().getEmail(),
                 theatre.get().getTheatreName(),
                 theatre.get().getAddress(),
+                show.get().getShowName(),
                 show.get().getTiming(),
                 seats);
 
@@ -100,41 +104,87 @@ public class SeatService {
 
         List<BookedSeats> listOfBookedSeats =  user.get().getBookedTickets();
 
-        listOfBookedSeats.sort((a, b) -> b.getTiming().compareTo(a.getTiming()));
+        listOfBookedSeats.sort(Comparator.comparing(BookedSeats::getTiming));
 
 
         return new ResponseDto("Booked tickets","BookedTickets", Optional.of(listOfBookedSeats));
 
     }
 
-    public ResponseDto cancelSeats(Long seatId,String Seats){
-
-        Optional<BookedSeats> bookedSeats = bookedSeatsRepo.findById(seatId);
-        Optional<Shows> shows = showsRepo.findById(bookedSeats.get().getShowId());
 
 
-        Set<Integer> cancelSeats = Arrays.stream(Seats.split(",")).map(s ->
-        {
-            if(bookedSeats.get().getSeats().contains(Integer.valueOf(s))){
-                bookedSeats.get().getSeats().remove(Integer.valueOf(s));
-                shows.get().getAvailableSeats().add(Integer.parseInt(s));
-            }
-            return Integer.valueOf(s);
-
-        }).collect(Collectors.toSet());
-
-
-
-        if(bookedSeats.get().getSeats().isEmpty()){
-            bookedSeatsRepo.deleteById(seatId);
-        }
-        else {
-            bookedSeatsRepo.save(bookedSeats.get());
+    public ResponseDto cancelSeats(Long seatId, String Seats) {
+        Optional<BookedSeats> bookedSeatsOpt = bookedSeatsRepo.findById(seatId);
+        if (bookedSeatsOpt.isEmpty()) {
+            return new ResponseDto("No booking found with this ID", "failed");
         }
 
-        return new ResponseDto("Successfully tickets are cancelled","cancelled");
+        BookedSeats bookedSeat = bookedSeatsOpt.get();
+        Shows show = showsRepo.findById(bookedSeat.getShowId()).orElseThrow();
+        Users user = usersRepo.findById(bookedSeat.getUserId()).orElseThrow();
 
+        Set<Integer> cancelSeats = Arrays.stream(Seats.split(","))
+                .map(Integer::valueOf)
+                .collect(Collectors.toSet());
+
+        // Remove cancelled seats
+        bookedSeat.getSeats().removeAll(cancelSeats);
+        show.getAvailableSeats().addAll(cancelSeats);
+
+        // Save updated available seats
+        showsRepo.save(show);
+
+        // If no seats left, delete the booking
+        if (bookedSeat.getSeats().isEmpty()) {
+            show.getBookedSeats().remove(bookedSeat);
+            user.getBookedTickets().remove(bookedSeat);
+            bookedSeatsRepo.delete(bookedSeat);
+        } else {
+            bookedSeatsRepo.save(bookedSeat);
+        }
+
+        emailSender.cancelTicketMethod(
+                user.getEmail(),
+                show.getShowName(),
+                show.getTiming(),
+                Seats
+        );
+
+        return new ResponseDto("Successfully cancelled the selected tickets", "cancelled");
     }
+
+
+//    public ResponseDto cancelSeats(Long seatId,String Seats){
+//
+//        Optional<BookedSeats> bookedSeats = bookedSeatsRepo.findById(seatId);
+//        Optional<Shows> shows = showsRepo.findById(bookedSeats.get().getShowId());
+//        Optional<Users> users = usersRepo.findById(bookedSeats.get().getUserId());
+//
+//
+//        Set<Integer> cancelSeats = Arrays.stream(Seats.split(",")).map(s ->
+//        {
+//            if(bookedSeats.get().getSeats().contains(Integer.valueOf(s))){
+//                bookedSeats.get().getSeats().remove(Integer.valueOf(s));
+//                shows.get().getAvailableSeats().add(Integer.parseInt(s));
+//            }
+//            return Integer.valueOf(s);
+//
+//        }).collect(Collectors.toSet());
+//
+//
+//
+//        if(bookedSeats.get().getSeats().isEmpty() || bookedSeats.get().getSeats().size() < 1){
+//            bookedSeatsRepo.deleteById(seatId);
+//        }
+//        else {
+//            bookedSeatsRepo.save(bookedSeats.get());
+//        }
+//
+//        emailSender.cancelTicketMethod(users.get().getEmail(),shows.get().getShowName(),shows.get().getTiming(),Seats);
+//
+//        return new ResponseDto("Successfully tickets are cancelled","cancelled");
+//
+//    }
 
 
 }

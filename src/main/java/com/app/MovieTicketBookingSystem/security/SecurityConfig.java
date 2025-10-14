@@ -17,10 +17,11 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers( "/auth","/auth/**").permitAll()
+                        .requestMatchers( "/swagger-ui/index.html","/v3/api-docs","/swagger-ui/**","/v3/api-docs/swagger-config").permitAll()
                         .requestMatchers("/home","/home/**").permitAll()
                         .requestMatchers("/bookSeats","/bookSeats/**").hasRole("USER")
                         .requestMatchers("/user","/user/**").authenticated()
-                        .requestMatchers("/theatre,/theatre/**").authenticated()
+                        .requestMatchers("/theatre","/theatre/**").hasRole("THEATRE")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtFilterChain, UsernamePasswordAuthenticationFilter.class);

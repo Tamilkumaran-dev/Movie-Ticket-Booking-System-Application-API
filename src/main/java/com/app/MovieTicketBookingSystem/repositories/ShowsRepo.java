@@ -10,16 +10,18 @@ import org.springframework.data.repository.query.Param;
 public interface ShowsRepo extends JpaRepository<Shows,Long> {
 
 
-
-
     @Query("""
-       SELECT s FROM Shows s
-       WHERE (LOWER(s.showName) LIKE LOWER(CONCAT('%', :keyword, '%'))
-          OR LOWER(s.theatreName) LIKE LOWER(CONCAT('%', :keyword, '%'))
-          OR LOWER(s.theatreAddress) LIKE LOWER(CONCAT('%', :keyword, '%')))
-         AND s.timing > CURRENT_TIMESTAMP
-       """)
-    Page<Shows> searchShows(@Param("keyword")String keyword, Pageable pageable);
+   SELECT s FROM Shows s
+   WHERE (
+      LOWER(s.showName) LIKE LOWER(CONCAT('%', :keyword, '%'))
+      OR LOWER(s.theatreName) LIKE LOWER(CONCAT('%', :keyword, '%'))
+      OR LOWER(s.theatreAddress) LIKE LOWER(CONCAT('%', :keyword, '%'))
+      OR LOWER(s.genre) LIKE LOWER(CONCAT('%', :keyword, '%'))
+   )
+   AND s.timing > CURRENT_TIMESTAMP
+   """)
+    Page<Shows> searchShows(@Param("keyword") String keyword, Pageable pageable);
+
 
     @Query("SELECT s FROM Shows s WHERE s.timing > CURRENT_TIMESTAMP")
     Page<Shows> findAllUpcomingShows(Pageable pageable);

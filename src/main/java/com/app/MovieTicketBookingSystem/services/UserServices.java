@@ -13,6 +13,7 @@ import com.app.MovieTicketBookingSystem.utils.OtpSender;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -119,6 +120,17 @@ public class UserServices {
         Optional<Users> user = usersRepo.findByEmail(email);
 
         return new ResponseDto("User profile","Profile",user);
+    }
+
+    public ResponseDto editProfile(Users user){
+        Optional<Users> fetch =  usersRepo.findByEmail(user.getEmail());
+
+        fetch.get().setName(user.getName());
+        fetch.get().setMobileNo(user.getMobileNo());
+
+        usersRepo.save(fetch.get());
+
+        return new ResponseDto("Successfully updated", "Updated");
     }
 
 }

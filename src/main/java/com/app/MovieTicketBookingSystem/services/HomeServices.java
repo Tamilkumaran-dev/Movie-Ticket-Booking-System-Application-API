@@ -67,7 +67,7 @@ public class HomeServices {
 
     public Page<Shows> searchShows(String shows, int page, int size){
 
-        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("timing").descending());
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("timing").ascending());
 
         if(shows.equals("AllShows")){
             return showsRepo.findAllUpcomingShows(pageable);
