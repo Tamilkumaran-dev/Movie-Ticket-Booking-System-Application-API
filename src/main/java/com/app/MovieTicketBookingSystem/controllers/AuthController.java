@@ -67,10 +67,10 @@ public class AuthController {
 
             ResponseCookie cookie = ResponseCookie.from("jwt", res.getToken())
                     .httpOnly(true)          // inaccessible to JS
-                    .secure(false)            // required for HTTPS
+                    .secure(true)            // required for HTTPS
                     .path("/")               // root path
-                    .maxAge(60*2)    // 12 hours
-                    .sameSite("Lax")        // allow cross-origin
+                    .maxAge(60*60*2)    // 12 hours
+                    .sameSite("none")        // allow cross-origin
                     .build();
 
             // Add cookie to response
@@ -96,10 +96,10 @@ public class AuthController {
 
         ResponseCookie cookie = ResponseCookie.from("jwt", res.getToken())
                 .httpOnly(true)          // inaccessible to JS
-                .secure(false)            // required for HTTPS
+                .secure(true)            // required for HTTPS
                 .path("/")               // root path
-                .maxAge(60*2)    // 12 hours
-                .sameSite("Lax")        // allow cross-origin
+                .maxAge(60*60*2)    // 12 hours
+                .sameSite("none")        // allow cross-origin
                 .build();
 
         // Add cookie to response
@@ -146,10 +146,10 @@ public class AuthController {
 
             ResponseCookie cookie = ResponseCookie.from("jwt", res.getToken())
                     .httpOnly(true)          // inaccessible to JS
-                    .secure(false)            // required for HTTPS
+                    .secure(true)            // required for HTTPS
                     .path("/")               // root path
-                    .maxAge(60 * 2)    // 12 hours
-                    .sameSite("Lax")        // allow cross-origin
+                    .maxAge(60 *60 * 2)    // 12 hours
+                    .sameSite("none")        // allow cross-origin
                     .build();
 
             // Add cookie to response
@@ -176,10 +176,10 @@ public class AuthController {
 
         ResponseCookie cookie = ResponseCookie.from("jwt", res.getToken())
                 .httpOnly(true)          // inaccessible to JS
-                .secure(false)            // required for HTTPS
+                .secure(true)            // required for HTTPS
                 .path("/")               // root path
-                .maxAge(60*2)    // 12 hours
-                .sameSite("Lax")        // allow cross-origin
+                .maxAge(60*60*2)    // 12 hours
+                .sameSite("none")        // allow cross-origin
                 .build();
 
         // Add cookie to response
