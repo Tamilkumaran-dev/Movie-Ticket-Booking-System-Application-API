@@ -69,7 +69,7 @@ public class AuthController {
                     .httpOnly(true)          // inaccessible to JS
                     .secure(true)            // required for HTTPS
                     .path("/")               // root path
-                    .maxAge(60*60*2)    // 12 hours
+                    .maxAge(60*60*24*30)    // 12 hours
                     .sameSite("none")        // allow cross-origin
                     .build();
 
@@ -98,7 +98,7 @@ public class AuthController {
                 .httpOnly(true)          // inaccessible to JS
                 .secure(true)            // required for HTTPS
                 .path("/")               // root path
-                .maxAge(60*60*2)    // 12 hours
+                .maxAge(60*60*24*30)    // 12 hours
                 .sameSite("none")        // allow cross-origin
                 .build();
 
@@ -148,7 +148,7 @@ public class AuthController {
                     .httpOnly(true)          // inaccessible to JS
                     .secure(true)            // required for HTTPS
                     .path("/")               // root path
-                    .maxAge(60 *60 * 2)    // 12 hours
+                    .maxAge(60 *60 * 24*30)    // 12 hours
                     .sameSite("none")        // allow cross-origin
                     .build();
 
@@ -178,7 +178,7 @@ public class AuthController {
                 .httpOnly(true)          // inaccessible to JS
                 .secure(true)            // required for HTTPS
                 .path("/")               // root path
-                .maxAge(60*60*2)    // 12 hours
+                .maxAge(60*60*24*30)    // 12 hours
                 .sameSite("none")        // allow cross-origin
                 .build();
 

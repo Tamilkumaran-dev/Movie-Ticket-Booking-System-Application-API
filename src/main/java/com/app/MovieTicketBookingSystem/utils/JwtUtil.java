@@ -14,7 +14,7 @@ import java.util.Date;
 public class JwtUtil {
 
     private final static String SECRET = "gmgjgjgjflkdknjnlnfejooeeoejjejehdfjs fefjewonnnnnnn nnnnnsd s";
-    private final static long EXPIRATION = 120 * 1000;
+    private final static long EXPIRATION =  30 * 24 * 60 * 1000;
     private Key key= Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
 
     public String generateJwtToken(String email){

@@ -14,7 +14,7 @@ public class coreConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173") // your frontend
+                        .allowedOrigins("https://movie-ticket-booking-system-applica.vercel.app") // your frontend
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true)
                         .allowedHeaders("*")
