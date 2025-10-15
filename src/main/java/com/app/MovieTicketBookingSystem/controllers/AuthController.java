@@ -73,7 +73,7 @@ public class AuthController {
                     .sameSite("none")        // allow cross-origin
                     .build();
 
-            // Add cookie to response
+
             response.addHeader("Set-Cookie", cookie.toString());
 
             return new ResponseEntity<>(res, HttpStatus.OK);
@@ -102,14 +102,14 @@ public class AuthController {
                 .sameSite("none")        // allow cross-origin
                 .build();
 
-        // Add cookie to response
+
         response.addHeader("Set-Cookie", cookie.toString());
 
         return new ResponseEntity<>(res,HttpStatus.ACCEPTED);
     }
 
 
-    // Theatre auth controller
+
 
     @Operation(
             summary = "Register new Theatre end point",
@@ -152,7 +152,7 @@ public class AuthController {
                     .sameSite("none")        // allow cross-origin
                     .build();
 
-            // Add cookie to response
+
             response.addHeader("Set-Cookie", cookie.toString());
 
             return new ResponseEntity<>(res, HttpStatus.OK);
@@ -182,7 +182,7 @@ public class AuthController {
                 .sameSite("none")        // allow cross-origin
                 .build();
 
-        // Add cookie to response
+
         response.addHeader("Set-Cookie", cookie.toString());
 
 

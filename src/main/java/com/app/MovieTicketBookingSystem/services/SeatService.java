@@ -154,37 +154,5 @@ public class SeatService {
     }
 
 
-//    public ResponseDto cancelSeats(Long seatId,String Seats){
-//
-//        Optional<BookedSeats> bookedSeats = bookedSeatsRepo.findById(seatId);
-//        Optional<Shows> shows = showsRepo.findById(bookedSeats.get().getShowId());
-//        Optional<Users> users = usersRepo.findById(bookedSeats.get().getUserId());
-//
-//
-//        Set<Integer> cancelSeats = Arrays.stream(Seats.split(",")).map(s ->
-//        {
-//            if(bookedSeats.get().getSeats().contains(Integer.valueOf(s))){
-//                bookedSeats.get().getSeats().remove(Integer.valueOf(s));
-//                shows.get().getAvailableSeats().add(Integer.parseInt(s));
-//            }
-//            return Integer.valueOf(s);
-//
-//        }).collect(Collectors.toSet());
-//
-//
-//
-//        if(bookedSeats.get().getSeats().isEmpty() || bookedSeats.get().getSeats().size() < 1){
-//            bookedSeatsRepo.deleteById(seatId);
-//        }
-//        else {
-//            bookedSeatsRepo.save(bookedSeats.get());
-//        }
-//
-//        emailSender.cancelTicketMethod(users.get().getEmail(),shows.get().getShowName(),shows.get().getTiming(),Seats);
-//
-//        return new ResponseDto("Successfully tickets are cancelled","cancelled");
-//
-//    }
-
 
 }

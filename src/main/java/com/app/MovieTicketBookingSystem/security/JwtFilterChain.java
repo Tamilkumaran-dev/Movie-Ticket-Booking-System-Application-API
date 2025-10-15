@@ -95,7 +95,7 @@ public class JwtFilterChain extends OncePerRequestFilter {
 
                         }
                     }catch(io.jsonwebtoken.ExpiredJwtException ex) {
-                        // ⚠️ Token expired → clear cookie
+
                         clearJwtCookie(response);
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.getWriter().write("Token expired, please login again");
