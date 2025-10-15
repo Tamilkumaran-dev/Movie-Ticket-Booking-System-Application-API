@@ -67,7 +67,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Component
-@AllArgsConstructor
 public class OtpSender {
 
     @Value("${SENDGRID_API_KEY}")
